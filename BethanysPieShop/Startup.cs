@@ -46,16 +46,42 @@ namespace BethanysPieShop
                 app.UseDeveloperExceptionPage();
             }
 
+            // uses secure HTTPS protocol
             app.UseHttpsRedirection();
+            // serves static files - default folder for static files is wwwroot
             app.UseStaticFiles(); 
-
+            // this routing middleware component enables routing system (engine)
+            /* we are going to use convention based routing
+             * second task of the routing engine is generating correct links (tag helpers)
+             * tag helpers create link in our view code (href) based on given controller and action
+             * tag helpers trigger server-side execution of code
+             * */
             app.UseRouting();
 
+            // this middleware component enables routing system
+            /* most apps have multiple routes defined
+             * matching system will sequentially run through all defined patterns
+             * and the first match will be used
+             * that means order is important - most specific routes must be at the top
+             * Endpoints are things that we are going to be navigating to.
+             * */
             app.UseEndpoints(endpoints =>
             {
+                /* adds convention based route to our application
+                 * maps URI to specific action within a controller
+                 * This is default route.
+                 * */ 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    // defaults are Home/Index when nothing is specified
+                    /* Through a process called model binding the value of id 
+                     * in the URI will be passed to the action parameter 
+                     * in the corresponding controller.
+                     * ? means that this URI segment is optional
+                     * part after the colon (int in this case) is called constraint
+                     * that means the last segment (id) must be integer value to be a match
+                     * */
+                    pattern: "{controller=Home}/{action=Index}/{id:int?}");
             });
         }
     }
