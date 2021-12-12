@@ -6,6 +6,7 @@ using BethanysPieShop.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,10 @@ namespace BethanysPieShop
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // AddDefaultIdentity brings in basic functionality for working with identity
+            // AddEntityFrameworkStores indicates that identity needs to use EF to store its data and its going to use AppDbContext to do so
+            services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPieRepository, PieRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
@@ -41,6 +46,8 @@ namespace BethanysPieShop
             services.AddHttpContextAccessor();
             // allows us to use sessions (session ID, cookies)
             services.AddSession();
+            // because scaffolded identity uses Razor pages
+            services.AddRazorPages();
 
 
         }
@@ -67,6 +74,11 @@ namespace BethanysPieShop
              * */
             app.UseRouting();
 
+            // this middleware will enable us to authenticate using ASP.NET Core Identity
+            app.UseAuthentication();
+            // this middleware will enable us to authorize users
+            app.UseAuthorization();
+
             // this middleware component enables routing system
             /* most apps have multiple routes defined
              * matching system will sequentially run through all defined patterns
@@ -91,6 +103,7 @@ namespace BethanysPieShop
                      * that means the last segment (id) must be integer value to be a match
                      * */
                     pattern: "{controller=Home}/{action=Index}/{id:int?}");
+                endpoints.MapRazorPages();
             });
         }
     }

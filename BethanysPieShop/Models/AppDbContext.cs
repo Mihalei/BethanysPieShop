@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BethanysPieShop.Models
 {
-    public class AppDbContext: DbContext
+    /* IdentityDbContext is the base class for the EF Core context to use with identity.
+     * IdentityUser is a built-in class that can be used to represent an user in identity.
+     * */
+    public class AppDbContext: IdentityDbContext<IdentityUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
