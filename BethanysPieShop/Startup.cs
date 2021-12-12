@@ -32,6 +32,7 @@ namespace BethanysPieShop
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPieRepository, PieRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             // ensures when user comes to the site shopping cart will be associated with that request
             services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
 
