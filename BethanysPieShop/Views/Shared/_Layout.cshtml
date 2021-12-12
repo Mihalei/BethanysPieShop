@@ -23,8 +23,13 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+                    <!-- asp-controller and asp-action are tag helpers that trigger code execution that creates a link -->
                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Pie" asp-action="List">Pies</a></li>
+                    <!-- this is syntax for invoking a view component -->
+                    @await Component.InvokeAsync("CategoryMenu")
+
+                    <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
+                    @await Component.InvokeAsync("ShoppingCartSummary")
                 </ul>
             </div>
         </div>

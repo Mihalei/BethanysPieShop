@@ -32,8 +32,14 @@ namespace BethanysPieShop
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPieRepository, PieRepository>();
+            // ensures when user comes to the site shopping cart will be associated with that request
+            services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
 
             services.AddControllersWithViews();//services.AddMvc(); would also work still
+            // allows us to access the session object
+            services.AddHttpContextAccessor();
+            // allows us to use sessions (session ID, cookies)
+            services.AddSession();
 
 
         }
@@ -49,7 +55,9 @@ namespace BethanysPieShop
             // uses secure HTTPS protocol
             app.UseHttpsRedirection();
             // serves static files - default folder for static files is wwwroot
-            app.UseStaticFiles(); 
+            app.UseStaticFiles();
+            // support for sessions
+            app.UseSession();
             // this routing middleware component enables routing system (engine)
             /* we are going to use convention based routing
              * second task of the routing engine is generating correct links (tag helpers)
